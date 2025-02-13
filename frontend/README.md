@@ -12,17 +12,4 @@ export default defineConfig({
 })
 - Import Tailwind CSS: @import "tailwindcss";
 - install react router dom: npm install react-router-dom
-- sử dụng react router bao bọc ứng dụng
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";  // ✅ Đúng
 
-import App from "./App";
-
-const root = document.getElementById("root");
-
-ReactDOM.createRoot(root).render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
-);
