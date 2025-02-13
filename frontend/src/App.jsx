@@ -5,7 +5,9 @@ function App() {
     return (
         <>
             <nav>Navbar</nav>
-            <Outlet />
+            <main className='min-h-screen max-w-creen mx-auto px-4 py-6 font-primary underline'>
+                <Outlet />
+            </main>
             <footer>Footer</footer>
         </>
     );
