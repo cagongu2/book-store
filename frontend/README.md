@@ -13,4 +13,6 @@ export default defineConfig({
 - Import Tailwind CSS: @import "tailwindcss";
 - install react router dom: npm install react-router-dom
 - install react-icons: npm install react-icons --save
+- install proptypes: npm install prop-types
+- install swiper: npm install swiper
 
