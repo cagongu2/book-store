@@ -1,7 +1,7 @@
 // import React from 'react'
 import Banner from './Banner'
+import Recommened from './Recommened'
 import TopSellers from './TopSellers'
-// import Recommened from './Recommened'
 // import News from './News'
 
 const Home = () => {
@@ -9,8 +9,8 @@ const Home = () => {
     <>
         <Banner/>
         <TopSellers/>
-        {/* <Recommened/>
-        <News/> */}
+        <Recommened/>
+        {/* <News/> */}
     </>
   )
 }
