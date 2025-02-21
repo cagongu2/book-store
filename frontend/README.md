@@ -15,4 +15,5 @@ export default defineConfig({
 - install react-icons: npm install react-icons --save
 - install proptypes: npm install prop-types
 - install swiper: npm install swiper
+- install react-hook-form: npm install react-hook-form
 
