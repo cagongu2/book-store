@@ -24,9 +24,11 @@
 - momgoose ODM
   - install Mongoose from the command line using `npm`: `npm install mongoose --save`
 - dotenv is library help you manage env parameter
-  - `npm i dotenv`
+  - `npm igit dotenv`
   - ```DB_USER=cagongu
     DB_PASSWORD=MySecurePassword
     DB_HOST=cluster0.abcd.mongodb.net
     DB_NAME=book-store
     ```
+- install cors: `npm install cors`
+- install jsonwebtoken: `npm install jsonwebtoken`
