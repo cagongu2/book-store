@@ -9,6 +9,7 @@ import { HiOutlineUser } from "react-icons/hi";
 import avatarImg from "../assets/avatar.png";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useAuth } from "../context/AuthContext";
 
 const navigation = [
   { name: "Dashboard", href: "/user-dashboard" },
@@ -21,17 +22,26 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const cartItems = useSelector((state) => state.cart.cartItems);
 
-  const currentUser = true;
+  const { currentUser, logout } = useAuth();
+  const handleLogOut = () => {
+    logout();
+  };
+
+  const token = localStorage.getItem("token");
 
   return (
     <header className="max-w-screen-2xl mx-auto px-4 py-6">
       <nav className="flex justify-between items-center">
+        {/* left side */}
         <div className="flex items-center md:gap-16 gap-4">
           <Link to="/">
             <HiMiniBars3CenterLeft className="size-6" />
           </Link>
+
+          {/* search input */}
           <div className="relative sm:w-72 w-40 space-x-2">
             <IoSearchOutline className="absolute inline-block left-3 inset-y-2" />
+
             <input
               type="text"
               placeholder="Search here"
@@ -54,7 +64,6 @@ const Navbar = () => {
                     }`}
                   />
                 </button>
-
                 {/* show dropdowns */}
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40">
@@ -73,7 +82,10 @@ const Navbar = () => {
                         </li>
                       ))}
                       <li>
-                        <button className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                        <button
+                          onClick={handleLogOut}
+                          className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                        >
                           Logout
                         </button>
                       </li>
@@ -81,6 +93,10 @@ const Navbar = () => {
                   </div>
                 )}
               </>
+            ) : token ? (
+              <Link to="/dashboard" className="border-b-2 border-primary">
+                Dashboard
+              </Link>
             ) : (
               <Link to="/login">
                 {" "}
@@ -89,16 +105,15 @@ const Navbar = () => {
             )}
           </div>
 
-          <button className="sm:block">
+          <button className="hidden sm:block">
             <HiOutlineHeart className="size-6" />
           </button>
 
           <Link
             to="/cart"
-            className="p-1 sm:px-6 px-2 flex items-center rounded-sm"
-            style={{ backgroundColor: "#FFCE1A" }}
+            className="bg-primary p-1 sm:px-6 px-2 flex items-center rounded-sm"
           >
-            <HiOutlineShoppingCart />
+            <HiOutlineShoppingCart className="" />
             {cartItems.length > 0 ? (
               <span className="text-sm font-semibold sm:ml-1">
                 {cartItems.length}

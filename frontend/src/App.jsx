@@ -5,21 +5,24 @@ import Navbar from "./components/Navbar";
 // import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 import Footer from "./components/Footer";
+import { AuthProvide } from "./context/AuthContext";
 
 // import required modules
 
 function App() {
   return (
     <>
-      <Navbar />
-      <main className="min-h-screen max-w-screen-2xl mx-auto px-4 py-6 font-primary">
-        <Outlet />
-      </main>
-      <Footer/>
+      <AuthProvide>
+        <Navbar />
+        <main className="min-h-screen max-w-screen-2xl mx-auto px-4 py-6 font-primary">
+          <Outlet />
+        </main>
+        <Footer />
+      </AuthProvide>
     </>
   );
 }
