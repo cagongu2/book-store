@@ -16,7 +16,7 @@ export default defineConfig({
 - install proptypes: npm install prop-types
 - install swiper: npm install swiper
 - install react-hook-form: npm install react-hook-form
-- install redux toolkit: npm install @reduxjs/toolkit react-redux {quản lý trạng thái phổ biến trong các ứng dụng JavaScript, đặc biệt là React. Nó giúp quản lý dữ liệu của ứng dụng một cách nhất quán, dễ kiểm soát và dễ mở rộng.}
+- install redux toolkit: npm install @reduxjs/toolkit react-redux {quản lý trạng thái phổ biến trong các ứng dụng JavaScript, đặc biệt là React. Nó giúp quản lý dữ liệu của ứng dụng một cách nhất quán, dễ kiểm soát và dễ mở rộng. }
 - install sweetalert2: npm install sweetalert2
 - install firebase: npm install firebase {cần tạo một file firebase.config.js trong dự án để cấu hình. thông tin cấu hình sẽ xuất hiện khi bạn taọ dự án firebase mới.}
 - install firebase-tools: npm install -g firebase-tools

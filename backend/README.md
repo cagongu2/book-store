@@ -4,7 +4,7 @@
 
 1. npm init -y (-y in order to acept all yes/no question when init project)
 2. create index.js file
-3. npm install express
+3. `npm install express`
 
 ## How to run this project
 
