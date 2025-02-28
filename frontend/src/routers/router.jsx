@@ -6,6 +6,7 @@ import Register from "../components/Register";
 import CartPage from "../pages/books/CartPage";
 import CheckoutPage from "../pages/books/CheckoutPage";
 import SingleBook from "../pages/books/SingleBook";
+import PrivateRoute from "../routers/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -30,19 +31,23 @@ const router = createBrowserRouter([
       },
       {
         path: "/register",
-        element: <Register/>,
+        element: <Register />,
       },
       {
         path: "/cart",
-        element: <CartPage/>,
+        element: <CartPage />,
       },
       {
         path: "/checkout",
-        element: <CheckoutPage/>,
+        element: (
+          <PrivateRoute>
+            <CheckoutPage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/books/:id",
-        element: <SingleBook/>
+        element: <SingleBook />,
       },
       {
         path: "/user-dashboard",

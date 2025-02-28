@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const CheckoutPage = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -9,14 +10,14 @@ const CheckoutPage = () => {
     .reduce((acc, item) => acc + item.newPrice, 0)
     .toFixed(2);
 
+  const { currentUser } = useAuth();
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-
-  const currentUser = true;
 
   const onSubmit = async (data) => {
     const newOrder = {
@@ -32,7 +33,7 @@ const CheckoutPage = () => {
       productIds: cartItems.map((item) => item?._id),
       totalPrice: totalPrice,
     };
-    console.log(newOrder)
+    console.log(newOrder);
   };
 
   return (
@@ -247,10 +248,7 @@ const CheckoutPage = () => {
 
                       <div className="md:col-span-5 text-right">
                         <div className="inline-flex items-end">
-                          <button
-                            
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                          >
+                          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Place an Order
                           </button>
                         </div>
