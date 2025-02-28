@@ -5,8 +5,8 @@ const verifyAdminToken = require('../middleware/verifyAdminToken');
 const router =  express.Router();
 
 // post a book
-router.post("/create-book", postABook)
-// , verifyAdminToken
+router.post("/create-book", verifyAdminToken, postABook)
+
 // get all books
 router.get("/", getAllBooks);
 
@@ -14,8 +14,9 @@ router.get("/", getAllBooks);
 router.get("/:id", getSingleBook);
 
 // update a book endpoint
-router.put("/edit/:id", UpdateBook);
-// , verifyAdminToken
-router.delete("/:id", deleteABook)
-// , verifyAdminToken
+router.put("/edit/:id", verifyAdminToken, UpdateBook);
+
+// delete a book endpoint
+router.delete("/:id", verifyAdminToken, deleteABook)
+
 module.exports = router;

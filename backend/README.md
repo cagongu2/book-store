@@ -32,3 +32,4 @@
     ```
 - install cors: `npm install cors`
 - install jsonwebtoken: `npm install jsonwebtoken`
+- install bcrypt: `npm i bcrypt`
