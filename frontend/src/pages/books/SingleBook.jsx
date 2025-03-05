@@ -8,13 +8,18 @@ import { getImgUrl } from "../../utils/getImgUrl";
 
 const SingleBook = () => {
   const { id } = useParams();
+
   const { data: book, isLoading, isError } = useFetchBookByIdQuery(id);
+
   const dispatch = useDispatch();
+
   const handleAddToCart = (product) => {
     dispatch(addToCart(product));
   };
+
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error happending to load book info</div>;
+
   return (
     <div className="max-w-lg shadow-md p-5">
       <h1 className="text-2xl font-bold mb-6">{book.title}</h1>
