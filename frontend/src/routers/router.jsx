@@ -60,8 +60,16 @@ const router = createBrowserRouter([
       },
       {
         path: "/user-dashboard",
-        element: <PrivateRoute><UserDashboard/></PrivateRoute>
-      }
+        element: (
+          <PrivateRoute>
+            <UserDashboard />
+          </PrivateRoute>
+        ),
+      },
+      // {
+      //   path: "/index",
+      //   element: <index />,
+      // },
     ],
   },
   {
@@ -70,7 +78,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element:  <AdminRoute><DashboardLayout/></AdminRoute>,
+    element: (
+      <AdminRoute>
+        <DashboardLayout />
+      </AdminRoute>
+    ),
     children: [
       {
         path: "",
@@ -82,22 +94,28 @@ const router = createBrowserRouter([
       },
       {
         path: "add-new-book",
-        element: <AdminRoute>
-          <AddBook/>
-        </AdminRoute>
+        element: (
+          <AdminRoute>
+            <AddBook />
+          </AdminRoute>
+        ),
       },
       {
         path: "edit-book/:id",
-        element: <AdminRoute>
-          <UpdateBook/>
-        </AdminRoute>
+        element: (
+          <AdminRoute>
+            <UpdateBook />
+          </AdminRoute>
+        ),
       },
       {
         path: "manage-books",
-        element: <AdminRoute>
-          <ManageBooks/>
-        </AdminRoute>
-      }
+        element: (
+          <AdminRoute>
+            <ManageBooks />
+          </AdminRoute>
+        ),
+      },
     ],
   },
 ]);

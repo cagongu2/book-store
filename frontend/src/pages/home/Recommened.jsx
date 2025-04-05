@@ -37,11 +37,11 @@ const Recommened = () => {
             spaceBetween: 40,
           },
           1024: {
-            slidesPerView: 22,
+            slidesPerView: 3,
             spaceBetween: 50,
           },
           1180: {
-            slidesPerView: 3,
+            slidesPerView: 4,
             spaceBetween: 50,
           },
         }}

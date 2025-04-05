@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const [message, setMessage] = useState("");
-  const { loginUser , signInWithGoogle} = useAuth();
+  const { loginUser, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
   const {
     register,
@@ -41,7 +41,7 @@ const Login = () => {
       <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h2 className="text-xl font-semibold mb-4">Please Login</h2>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -55,6 +55,10 @@ const Login = () => {
                 pattern: {
                   value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
                   message: "Invalid email format",
+                },
+                maxLength: {
+                  value: 255,
+                  message: 'Email cannot exceed 255 characters',
                 },
               })}
               type="email"
@@ -83,6 +87,10 @@ const Login = () => {
                   value: 6,
                   message: "Password must be at least 6 characters",
                 },
+                maxLength: {
+                  value: 100,
+                  message: "Password cannot exceed 100 characters",
+                },
               })}
               type="password"
               name="password"
@@ -100,7 +108,10 @@ const Login = () => {
             <p className="text-red-500 text-xs italic mb-3">{message}</p>
           )}
           <div>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none">
+            <button
+              id="login-btn"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none"
+            >
               Login{" "}
             </button>
           </div>

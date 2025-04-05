@@ -25,7 +25,7 @@ const CheckoutPage = () => {
   const onSubmit = async (data) => {
     const newOrder = {
       name: data.name,
-      email: currentUser?.email,
+      email: currentUser.email,
       address: {
         city: data.city,
         country: data.country,
