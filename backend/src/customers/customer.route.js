@@ -1,5 +1,7 @@
 const express = require('express');
 const verifyCustomerToken = require('../middleware/verifyCustomerToken');
+const validateRequest = require('../middleware/validateRequest');
+const { registerCustomerSchema, loginCustomerSchema } = require('../validations/auth.validation');
 const { registerCustomer, loginCustomer, getProfile } = require('./customer.controller');
 
 const router = express.Router();
@@ -34,7 +36,7 @@ const router = express.Router();
  *       409:
  *         description: Email đã tồn tại
  */
-router.post('/register', registerCustomer);
+router.post('/register', validateRequest(registerCustomerSchema), registerCustomer);
 
 /**
  * @swagger
@@ -64,7 +66,7 @@ router.post('/register', registerCustomer);
  *       403:
  *         description: Tài khoản bị vô hiệu hóa
  */
-router.post('/login', loginCustomer);
+router.post('/login', validateRequest(loginCustomerSchema), loginCustomer);
 
 /**
  * @swagger

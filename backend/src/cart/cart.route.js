@@ -1,5 +1,7 @@
 const express = require('express');
 const verifyCustomerToken = require('../middleware/verifyCustomerToken');
+const validateRequest = require('../middleware/validateRequest');
+const { mergeCartSchema } = require('../validations/cart.validation');
 const { mergeCart, getCart } = require('./cart.controller');
 
 const router = express.Router();
@@ -32,7 +34,7 @@ const router = express.Router();
  *       200:
  *         description: Trả về giỏ hàng đã merge
  */
-router.post('/merge', verifyCustomerToken, mergeCart);
+router.post('/merge', verifyCustomerToken, validateRequest(mergeCartSchema), mergeCart);
 
 /**
  * @swagger

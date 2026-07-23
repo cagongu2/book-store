@@ -12,10 +12,6 @@ const JWT_SECRET = process.env.JWT_SECRET_KEY;
 const loginAdmin = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
     
-    if (!username || !password) {
-        throw ApiError.badRequest("Vui lòng nhập tên đăng nhập và mật khẩu", ErrorCodes.VALIDATION_ERROR);
-    }
-
     const admin = await User.findOne({ username });
     
     // Don't reveal if admin exists or not in error message to prevent enumeration

@@ -19,7 +19,10 @@ const errorHandler = (err, req, res, next) => {
         statusCode = 400;
         response.error_code = ErrorCodes.VALIDATION_ERROR;
         response.message = 'Dữ liệu không hợp lệ';
-        response.details = Object.values(err.errors).map(val => val.message);
+        response.details = Object.values(err.errors).map(val => ({
+            error_code: ErrorCodes.VALIDATION_ERROR,
+            message: val.message
+        }));
     } else if (err.name === 'CastError') {
         // Mongoose Cast Error (e.g. invalid ObjectId)
         statusCode = 400;

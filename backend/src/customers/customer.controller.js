@@ -12,14 +12,6 @@ const JWT_SECRET = process.env.JWT_SECRET_KEY;
 const registerCustomer = asyncHandler(async (req, res) => {
     const { email, password, displayName } = req.body;
     
-    if (!email || !password) {
-        throw ApiError.badRequest("Vui lòng cung cấp email và password", ErrorCodes.VALIDATION_ERROR);
-    }
-    
-    if (password.length < 6) {
-        throw ApiError.badRequest("Mật khẩu phải có ít nhất 6 ký tự", ErrorCodes.VALIDATION_ERROR);
-    }
-
     const existingCustomer = await Customer.findOne({ email });
     if (existingCustomer) {
         throw ApiError.conflict("Email đã được sử dụng");
@@ -50,10 +42,6 @@ const registerCustomer = asyncHandler(async (req, res) => {
 const loginCustomer = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     
-    if (!email || !password) {
-        throw ApiError.badRequest("Vui lòng cung cấp email và password", ErrorCodes.VALIDATION_ERROR);
-    }
-
     const customer = await Customer.findOne({ email });
     
     if (!customer) {
