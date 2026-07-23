@@ -67,7 +67,7 @@ h1, h2, h3 {
   transition-duration: var(--default-transition-duration);
 }
 
-.btn-primary: hover {
+.btn-primary:hover {
   background-color: #6b7280;
   color: #ffffff;
 }

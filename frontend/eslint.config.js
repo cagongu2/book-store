@@ -12,8 +12,7 @@ export default [
       ecmaVersion: 2020,
       globals: {
         ...globals.browser, 
-        ...globals.node,    
-        ...globals.jest
+        ...globals.node
       },
       parserOptions: {
         ecmaVersion: 'latest',

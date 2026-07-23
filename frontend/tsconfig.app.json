@@ -22,9 +22,8 @@
     "ignoreDeprecations": "5.0",
 
     /* Paths */
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"]
