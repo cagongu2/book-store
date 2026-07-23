@@ -22,3 +22,8 @@ export default defineConfig({
 - install firebase-tools: `npm install -g firebase-tools`
 - install axios: `npm install axios`
 - install `npm i react-chartjs-2`
+
+---
+**Lưu ý:** Xem chi tiết kiến trúc và nghiệp vụ dự án tại thư mục `docs/` ở thư mục gốc:
+- [Kiến trúc hệ thống](../docs/architecture.md)
+- [Đặc tả nghiệp vụ (SRS)](../docs/srs.md)

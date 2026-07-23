@@ -33,3 +33,8 @@
 - install cors: `npm install cors`
 - install jsonwebtoken: `npm install jsonwebtoken`
 - install bcrypt: `npm i bcrypt`
+
+---
+**Lưu ý:** Xem chi tiết kiến trúc và nghiệp vụ dự án tại thư mục `docs/` ở thư mục gốc:
+- [Kiến trúc hệ thống](../docs/architecture.md)
+- [Đặc tả nghiệp vụ (SRS)](../docs/srs.md)
