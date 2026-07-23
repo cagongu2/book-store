@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import axios from "axios";
+import { callApi } from "../core/api/handleApi";
 import { Customer } from "../types/customer.types";
 import { ApiResponse } from "../types/api.types";
 
@@ -19,11 +19,7 @@ export const useAuth = () => {
     throw new Error("useAuth must be used within an AuthProvide");
   }
   return context;
-};
-
-const getBaseUrl = () => {
-    return "http://localhost:5000/api/v1";
-}
+// getBaseUrl is configured in axios-client already, so we just pass the path.
 
 export const AuthProvide = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<Customer | null>(null);
@@ -33,14 +29,10 @@ export const AuthProvide = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const token = localStorage.getItem("customerToken");
     if (token) {
-      axios.get<ApiResponse<{ customer: Customer }>>(`${getBaseUrl()}/customers/profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      callApi<{ customer: Customer }>("/customers/profile", null, "get")
       .then(res => {
-        if (res.data.success && res.data.data?.customer) {
-          setCurrentUser(res.data.data.customer);
+        if (res.success && res.data?.customer) {
+          setCurrentUser(res.data.customer);
         } else {
           localStorage.removeItem("customerToken");
         }
@@ -58,30 +50,30 @@ export const AuthProvide = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const registerUser = async (email: string, password: string, displayName?: string) => {
-    const res = await axios.post<ApiResponse<{ token: string; customer: Customer }>>(`${getBaseUrl()}/customers/register`, {
+    const res = await callApi<{ token: string; customer: Customer }>("/customers/register", {
       email,
       password,
       displayName
-    });
+    }, "post");
     
-    if (res.data.success && res.data.data) {
-      localStorage.setItem("customerToken", res.data.data.token);
-      setCurrentUser(res.data.data.customer);
+    if (res.success && res.data) {
+      localStorage.setItem("customerToken", res.data.token);
+      setCurrentUser(res.data.customer);
     }
-    return res.data;
+    return res;
   };
 
   const loginUser = async (email: string, password: string) => {
-    const res = await axios.post<ApiResponse<{ token: string; customer: Customer }>>(`${getBaseUrl()}/customers/login`, {
+    const res = await callApi<{ token: string; customer: Customer }>("/customers/login", {
       email,
       password
-    });
+    }, "post");
 
-    if (res.data.success && res.data.data) {
-      localStorage.setItem("customerToken", res.data.data.token);
-      setCurrentUser(res.data.data.customer);
+    if (res.success && res.data) {
+      localStorage.setItem("customerToken", res.data.token);
+      setCurrentUser(res.data.customer);
     }
-    return res.data;
+    return res;
   };
 
   const logout = () => {

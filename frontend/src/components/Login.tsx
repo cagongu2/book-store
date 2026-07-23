@@ -1,142 +1,116 @@
 import React, { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
-import { useForm } from "react-hook-form";
+import { Form, Input, Button, Alert, Typography } from "antd";
+import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext";
 
+const { Title, Text } = Typography;
+
 const Login = () => {
-  const [message, setMessage] = useState("");
   const { loginUser, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const onSubmit = async (data) => {
-    try {
-      await loginUser(data.email, data.password);
-      alert("Login successfully");
-      navigate("/");
-    } catch (error) {
-      setMessage("Please provide a valid email and password");
-      console.error(error);
+  const loginMutation = useMutation({
+    mutationFn: async (values: any) => {
+      return await loginUser(values.email, values.password);
+    },
+    onSuccess: (data) => {
+      if (data.success) {
+        navigate("/");
+      } else {
+        setErrorMessage(data.message || "Đăng nhập thất bại");
+      }
+    },
+    onError: (error: any) => {
+      setErrorMessage(error.message || "Vui lòng kiểm tra lại email và mật khẩu");
     }
+  });
+
+  const onFinish = (values: any) => {
+    setErrorMessage("");
+    loginMutation.mutate(values);
   };
 
   const handleGoogleSignIn = async () => {
     try {
       await signInWithGoogle();
-      alert("Login successfully");
       navigate("/");
-    } catch (error) {
-      setMessage("Please provide a valid email and password");
-      console.error(error);
+    } catch (error: any) {
+      setErrorMessage("Không thể đăng nhập bằng Google");
     }
   };
+
   return (
-    <div className="h-[calc(100vh-120px)] flex justify-center items-center ">
+    <div className="h-[calc(100vh-120px)] flex justify-center items-center">
       <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-xl font-semibold mb-4">Please Login</h2>
+        <Title level={3} className="text-center mb-6">Đăng nhập</Title>
 
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <input
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                  message: "Invalid email format",
-                },
-                maxLength: {
-                  value: 255,
-                  message: 'Email cannot exceed 255 characters',
-                },
-              })}
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Email Address"
-              className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-xs italic">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
-                },
-                maxLength: {
-                  value: 100,
-                  message: "Password cannot exceed 100 characters",
-                },
-              })}
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Password"
-              className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-xs italic">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-          {message && (
-            <p className="text-red-500 text-xs italic mb-3">{message}</p>
-          )}
-          <div>
-            <button
-              id="login-btn"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none"
-            >
-              Login{" "}
-            </button>
-          </div>
-        </form>
-        <p className="align-baseline font-medium mt-4 text-sm">
-          Haven't an account? Please{" "}
-          <Link to="/register" className="text-blue-500 hover:text-blue-700">
-            Register
-          </Link>
-        </p>
+        {errorMessage && (
+          <Alert message={errorMessage} type="error" showIcon className="mb-4" />
+        )}
 
-        {/* google sign in */}
-        <div className="mt-4">
-          <button
-            onClick={handleGoogleSignIn}
-            className="w-full flex flex-wrap gap-1 items-center justify-center bg-blue-950 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none"
+        <Form
+          name="loginForm"
+          layout="vertical"
+          onFinish={onFinish}
+          autoComplete="off"
+        >
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Vui lòng nhập email" },
+              { type: "email", message: "Email không hợp lệ" },
+              { max: 255, message: "Email quá dài" }
+            ]}
           >
-            <FaGoogle className="mr-2" />
-            Sign in with Google
-          </button>
+            <Input placeholder="Nhập địa chỉ email" size="large" />
+          </Form.Item>
+
+          <Form.Item
+            label="Mật khẩu"
+            name="password"
+            rules={[
+              { required: true, message: "Vui lòng nhập mật khẩu" },
+              { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự" }
+            ]}
+          >
+            <Input.Password placeholder="Nhập mật khẩu" size="large" />
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              block
+              loading={loginMutation.isPending}
+            >
+              Đăng nhập
+            </Button>
+          </Form.Item>
+        </Form>
+
+        <div className="text-center mt-2">
+          <Text>Chưa có tài khoản? </Text>
+          <Link to="/register" className="text-blue-500 hover:text-blue-700 font-medium">
+            Đăng ký ngay
+          </Link>
         </div>
 
-        <p className="mt-5 text-center text-gray-500 text-xs">
-          ©2025 Book Store. All rights reserved.
-        </p>
+        <div className="mt-4">
+          <Button
+            onClick={handleGoogleSignIn}
+            block
+            size="large"
+            icon={<FaGoogle className="text-red-500" />}
+            className="flex items-center justify-center bg-gray-50 hover:bg-gray-100"
+          >
+            Đăng nhập bằng Google
+          </Button>
+        </div>
       </div>
     </div>
   );
