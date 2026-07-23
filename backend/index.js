@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const errorHandler = require('./src/middleware/errorHandler');
 
 const mongoose = require("mongoose");
 const port = process.env.PORT || 5000;
@@ -17,16 +18,21 @@ const orderRoutes = require('./src/orders/order.route');
 const userRoutes = require('./src/users/user.router');
 const adminRoutes = require("./src/stats/admin.stats")
 const customerRoutes = require('./src/customers/customer.route');
+const cartRoutes = require('./src/cart/cart.route');
 
 app.use("/api/v1/books", bookRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/admin", adminRoutes)
 app.use("/api/v1/customers", customerRoutes);
+app.use("/api/v1/carts", cartRoutes);
 
 // Swagger setup
 const { swaggerUi, specs } = require('./src/config/swagger');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+// Add global error handler at the end
+app.use(errorHandler);
 
 async function main() {
     await mongoose.connect(process.env.DB_URL);
