@@ -1,6 +1,7 @@
 const express = require('express');
-const { loginAdmin } = require('./user.controller');
+const { loginAdmin, getMe } = require('./user.controller');
 const validateRequest = require('../middleware/validateRequest');
+const verifyAdminToken = require('../middleware/verifyAdminToken');
 const { loginAdminSchema } = require('../validations/auth.validation');
 
 const router = express.Router();
@@ -41,5 +42,21 @@ const router = express.Router();
  *         description: Server error
  */
 router.post("/admin", validateRequest(loginAdminSchema), loginAdmin);
+
+/**
+ * @swagger
+ * /api/v1/auth/me:
+ *   get:
+ *     summary: Get current authenticated user profile
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Profile retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ */
+router.get("/me", verifyAdminToken, getMe);
 
 module.exports = router;

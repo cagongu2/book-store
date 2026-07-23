@@ -36,8 +36,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 // Add global error handler at the end
 app.use(errorHandler);
 
+const seedDefaultAdmin = require('./src/utils/seedAdmin');
+
 async function main() {
     await mongoose.connect(process.env.DB_URL);
+    await seedDefaultAdmin();
     app.get('/', (req, res) => {
         res.send('Hello World!');
     });

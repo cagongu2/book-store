@@ -61,6 +61,13 @@ const loginAdmin = asyncHandler(async (req, res) => {
     );
 });
 
+const getMe = asyncHandler(async (req, res) => {
+    res.status(200).json(
+        ApiResponse.success(UserMapper.toResponse(req.user), "Lấy thông tin tài khoản thành công")
+    );
+});
+
 module.exports = {
-    loginAdmin
+    loginAdmin,
+    getMe
 };
