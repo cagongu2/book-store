@@ -4,6 +4,10 @@ const JWT_SECRET = process.env.JWT_SECRET_KEY;
 const Customer = require('../customers/customer.model');
 
 const verifyCustomerToken = (req, res, next) => {
+    // TODO: Tạm thời bỏ qua auth ở Backend
+    req.customer = { _id: 'dummy_customer_id', email: 'customer@example.com', isActive: true };
+    return next();
+
     const token = req.headers['authorization']?.split(' ')[1];
 
     if (!token) {

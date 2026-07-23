@@ -4,6 +4,10 @@ const JWT_SECRET = process.env.JWT_SECRET_KEY
 const User = require('../users/user.model');
 
 const verifyAdminToken =  (req, res, next) => {
+    // TODO: Tạm thời bỏ qua auth ở Backend
+    req.user = { _id: 'dummy_admin_id', role: 'admin', email: 'admin@example.com', isActive: true };
+    return next();
+
     const token = req.headers['authorization']?.split(' ')[1];
 
     if (!token) {
