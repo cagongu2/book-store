@@ -16,7 +16,7 @@ const createBookSchema = z.object({
         categories: z.array(z.string().regex(objectIdRegex, "ID danh mục không hợp lệ")).min(1, "Phải chọn ít nhất 1 danh mục"),
         coverImage: z.string({ required_error: "Ảnh bìa là bắt buộc" }).min(1, "Ảnh bìa không được để trống"),
         images: z.array(z.string()).max(8, "Tối đa 8 ảnh phụ").optional(),
-        oldPrice: z.number({ required_error: "Giá cũ là bắt buộc" }).min(0, "Giá không hợp lệ"),
+        oldPrice: z.number().min(0, "Giá không hợp lệ").optional(),
         newPrice: z.number({ required_error: "Giá mới là bắt buộc" }).min(0, "Giá không hợp lệ"),
         stockQuantity: z.number({ required_error: "Số lượng tồn kho là bắt buộc" }).int().min(0, "Số lượng không hợp lệ"),
         stockThreshold: z.number().int().min(0).optional(),
@@ -52,15 +52,34 @@ const updateBookSchema = z.object({
     })
 });
 
+const getBookByIdSchema = z.object({
+    params: z.object({
+        id: z.string().regex(objectIdRegex, "ID sách không hợp lệ")
+    })
+});
+
+const deleteBookSchema = z.object({
+    params: z.object({
+        id: z.string().regex(objectIdRegex, "ID sách không hợp lệ")
+    })
+});
+
 const getBooksSchema = z.object({
     query: z.object({
         page: z.string().regex(/^\d+$/, "Page phải là số nguyên dương").optional(),
-        limit: z.string().regex(/^\d+$/, "Limit phải là số nguyên dương").optional()
+        limit: z.string().regex(/^\d+$/, "Limit phải là số nguyên dương").optional(),
+        category: z.string().regex(objectIdRegex, "ID danh mục không hợp lệ").optional(),
+        search: z.string().optional(),
+        status: z.enum(['draft', 'active', 'inactive']).optional(),
+        trending: z.enum(['true', 'false']).optional(),
+        sortBy: z.enum(['price_asc', 'price_desc', 'createdAt_desc', 'createdAt_asc', 'title_asc', 'title_desc']).optional()
     }).optional()
 });
 
 module.exports = {
     createBookSchema,
     updateBookSchema,
+    getBookByIdSchema,
+    deleteBookSchema,
     getBooksSchema
 };

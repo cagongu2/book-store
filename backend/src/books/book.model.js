@@ -16,7 +16,7 @@ const bookSchema = new mongoose.Schema({
     categories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
     coverImage: { type: String, required: true },
     images: { type: [String], default: [] },
-    oldPrice: { type: Number, required: true },
+    oldPrice: { type: Number },
     newPrice: { type: Number, required: true },
     stockQuantity: { type: Number, required: true, default: 0 },
     stockThreshold: { type: Number, default: 5 },

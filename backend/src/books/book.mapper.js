@@ -1,6 +1,13 @@
 class BookMapper {
     static toResponse(book) {
         if (!book) return null;
+
+        const oldPrice = book.oldPrice ?? book.newPrice;
+        const newPrice = book.newPrice;
+        const isDiscounted = Boolean(oldPrice && oldPrice > newPrice);
+        const discountPercent = isDiscounted
+            ? Math.round(((oldPrice - newPrice) / oldPrice) * 100)
+            : 0;
         
         return {
             id: book._id,
@@ -17,8 +24,10 @@ class BookMapper {
             categories: book.categories,
             coverImage: book.coverImage,
             images: book.images,
-            oldPrice: book.oldPrice,
-            newPrice: book.newPrice,
+            oldPrice: oldPrice,
+            newPrice: newPrice,
+            isDiscounted,
+            discountPercent,
             stockQuantity: book.stockQuantity,
             stockThreshold: book.stockThreshold,
             trending: book.trending,

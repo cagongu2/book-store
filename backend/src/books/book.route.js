@@ -2,7 +2,7 @@ const express = require('express');
 const { createBook, getBooks, getBookById, updateBook, deleteBook } = require('./book.controller');
 const verifyAdminToken = require('../middleware/verifyAdminToken');
 const validateRequest = require('../middleware/validateRequest');
-const { createBookSchema, updateBookSchema, getBooksSchema } = require('../validations/book.validation');
+const { createBookSchema, updateBookSchema, getBooksSchema, getBookByIdSchema, deleteBookSchema } = require('../validations/book.validation');
 const router =  express.Router();
 
 /**
@@ -30,7 +30,6 @@ const router =  express.Router();
  *               - title
  *               - categories
  *               - coverImage
- *               - oldPrice
  *               - newPrice
  *             properties:
  *               title:
@@ -84,19 +83,48 @@ router.post("/create-book", verifyAdminToken, validateRequest(createBookSchema),
  * @swagger
  * /api/v1/books:
  *   get:
- *     summary: Lấy danh sách toàn bộ sách (có phân trang)
+ *     summary: Lấy danh sách sách (có phân trang, bộ lọc và sắp xếp)
  *     tags: [Books]
  *     parameters:
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
+ *           default: 1
  *         description: Số trang hiện tại
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
+ *           default: 10
  *         description: Số lượng sách mỗi trang
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: ID danh mục (Bao gồm cả danh mục con)
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Từ khóa tìm kiếm (theo Tên sách, Tác giả, SKU)
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [draft, active, inactive]
+ *         description: Trạng thái sách
+ *       - in: query
+ *         name: trending
+ *         schema:
+ *           type: boolean
+ *         description: Sách nổi bật (true/false)
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *           enum: [price_asc, price_desc, createdAt_desc, createdAt_asc, title_asc, title_desc]
+ *         description: Tiêu chí sắp xếp
  *     responses:
  *       200:
  *         description: Danh sách sách
@@ -120,7 +148,7 @@ router.get("/", validateRequest(getBooksSchema), getBooks);
  *       200:
  *         description: Trả về thông tin chi tiết
  */
-router.get("/:id", getBookById);
+router.get("/:id", validateRequest(getBookByIdSchema), getBookById);
 
 /**
  * @swagger
@@ -210,6 +238,6 @@ router.put("/edit/:id", verifyAdminToken, validateRequest(updateBookSchema), upd
  *       200:
  *         description: Xóa sách thành công
  */
-router.delete("/:id", verifyAdminToken, deleteBook)
+router.delete("/:id", verifyAdminToken, validateRequest(deleteBookSchema), deleteBook)
 
 module.exports = router;

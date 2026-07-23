@@ -11,13 +11,19 @@ const createBook = asyncHandler(async (req, res) => {
     );
 });
 
-// get all books with pagination
+// get all books with pagination, filters and sorting
 const getBooks = asyncHandler(async (req, res) => {
-    // page và limit đã được validate bởi validateRequest (zod)
-    const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 10;
+    const { page, limit, category, search, status, trending, sortBy } = req.query;
 
-    const { books, meta } = await bookService.getBooks(page, limit);
+    const { books, meta } = await bookService.getBooks({
+        page,
+        limit,
+        category,
+        search,
+        status,
+        trending,
+        sortBy
+    });
     
     res.status(200).json(
         ApiResponse.success(BookMapper.toResponseList(books), "Lấy danh sách thành công", meta)
