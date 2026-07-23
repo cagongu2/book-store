@@ -1,50 +1,70 @@
-import axios from 'axios';
-import type { AxiosError, AxiosResponse } from 'axios';
+import axios, {
+  type InternalAxiosRequestConfig,
+} from "axios";
+import queryString from "query-string";
+import { message } from "antd";
+import { ApiError } from "./api-error";
+import { ENV } from "../../constants/env";
 
-// Get base URL from env or use default for development
-const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
 
-const axiosClient = axios.create({
-    baseURL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    // Allows sending cookies with requests
-    withCredentials: true,
+export const axiosClient = axios.create({
+  baseURL: ENV.END_POINT,
+  paramsSerializer: (params) => queryString.stringify(params),
 });
 
-// Interceptor for Request
 axiosClient.interceptors.request.use(
-    (config) => {
-        // You can attach token here if you store it in localStorage instead of cookies
-        const token = localStorage.getItem('token');
-        if (token && config.headers) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
+  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+    config.headers.set("Accept", "application/json");
+    if (!(config.data instanceof FormData) && !config.headers.has("Content-Type")) {
+      config.headers.set("Content-Type", "application/json");
     }
+    // const token = getAccessToken();
+    // if (token) {
+    //   config.headers.set("Authorization", `Bearer ${token}`);
+    // }
+    return config;
+  },
 );
 
-// Interceptor for Response
 axiosClient.interceptors.response.use(
-    (response: AxiosResponse) => {
-        // Return only the data from the response to simplify components
-        return response.data;
-    },
-    (error: AxiosError) => {
-        // Handle common errors like 401 Unauthorized globally
-        if (error.response?.status === 401) {
-            // Optional: Dispatch a logout action or redirect to login
-            console.error('Unauthorized, redirecting to login...');
-            localStorage.removeItem('token');
-            // window.location.href = '/login';
-        }
-        
-        return Promise.reject(error);
-    }
-);
+  (response) => response,
+  (error: unknown) => {
+    const apiError = ApiError.from(error);
 
-export default axiosClient;
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status;
+
+      switch (status) {
+        case 401:
+          // store.dispatch(logOut());
+          message.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.");
+
+          // if (window.location.pathname !== ROUTES.AUTH.LOGIN) {
+          //   window.location.href = ROUTES.AUTH.LOGIN;
+          // }
+          break;
+        case 403:
+          message.error("Bạn không có quyền thực hiện thao tác này.");
+          break;
+        case 404:
+          message.error("Không tìm thấy dữ liệu yêu cầu.");
+          break;
+        case 422:
+          message.error(apiError.message || "Dữ liệu không hợp lệ.");
+          break;
+        case undefined:
+          message.error("Không thể kết nối đến máy chủ.");
+          break;
+        default:
+          if (status >= 500) {
+            message.error("Lỗi hệ thống, vui lòng thử lại sau.");
+          }
+          break;
+      }
+    } else {
+      message.error(apiError.message || "Đã xảy ra lỗi không xác định.");
+    }
+
+    return Promise.reject(apiError);
+  },
+);

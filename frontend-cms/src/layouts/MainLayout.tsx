@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { toggleSidebar } from '../../store/slices/ui-slice';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { toggleSidebar } from '../store/slices/ui-slice';
 
 const MainLayout: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -11,9 +11,8 @@ const MainLayout: React.FC = () => {
         <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
             <aside
-                className={`bg-white shadow-md transition-all duration-300 ${
-                    sidebarCollapsed ? 'w-16' : 'w-64'
-                }`}
+                className={`bg-white shadow-md transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'
+                    }`}
             >
                 <div className="h-16 flex items-center justify-center border-b">
                     <span className="font-bold text-xl truncate">
