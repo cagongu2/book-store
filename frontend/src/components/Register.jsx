@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
   const [message, setMessage] = useState("");
-  const {registerUser, signInWithGoogle} = useAuth()
+  const { registerUser } = useAuth();
   const navigate = useNavigate();
   const {
     register,
@@ -26,15 +26,6 @@ const Register = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await signInWithGoogle();
-      alert("Login successfully");
-      navigate("/");
-    } catch (error) {
-      setMessage("Please provide a valid email and password");
-      console.error(error);
-    }
   };
   return (
     <div className="h-[calc(100vh-120px)] flex justify-center items-center ">
@@ -112,19 +103,8 @@ const Register = () => {
           </Link>
         </p>
 
-        {/* google sign in */}
-        <div className="mt-4">
-          <button
-            onClick={handleGoogleSignIn}
-            className="w-full flex flex-wrap gap-1 items-center justify-center bg-blue-950 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none"
-          >
-            <FaGoogle className="mr-2" />
-            Sign in with Google
-          </button>
-        </div>
-
         <p className="mt-5 text-center text-gray-500 text-xs">
-          ©2025 Book Store. All rights reserved.
+          ©2026 Book Store. All rights reserved.
         </p>
       </div>
     </div>
