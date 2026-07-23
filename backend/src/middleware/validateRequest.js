@@ -5,11 +5,14 @@ const ApiError = require('../core/ApiError');
 const validateRequest = (schema) => {
     return async (req, res, next) => {
         try {
-            await schema.parseAsync({
+            const parsedData = await schema.parseAsync({
                 body: req.body,
                 query: req.query,
                 params: req.params,
             });
+            req.body = parsedData.body;
+            req.query = parsedData.query;
+            req.params = parsedData.params;
             next();
         } catch (error) {
             if (error instanceof ZodError) {

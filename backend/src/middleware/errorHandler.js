@@ -14,6 +14,10 @@ const errorHandler = (err, req, res, next) => {
         response.error_code = err.errorCode;
         response.message = err.message;
         if (err.details) response.details = err.details;
+    } else if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        statusCode = 400;
+        response.error_code = ErrorCodes.VALIDATION_ERROR;
+        response.message = 'Cú pháp JSON không hợp lệ';
     } else if (err.name === 'ValidationError') {
         // Mongoose Validation Error
         statusCode = 400;
