@@ -1,0 +1,180 @@
+@import "ckeditor5/ckeditor5.css";
+
+.ck-editor__editable_inline {
+  min-height: 250px;
+  max-height: 1000px;
+  padding: 0 15px !important;
+}
+
+.ck-editor {
+  width: 100% !important;
+}
+
+.ck-editor-custom-wrapper {
+  --ck-border-radius: 8px;
+  --ck-color-base-border: #dee4ed;
+  --ck-color-focus-border: #eb5e25;
+  --ck-focus-ring: 0 0 0 2px rgba(235, 94, 37, 0.12);
+  width: 100%;
+}
+
+.ck-editor-custom-wrapper .ck.ck-editor {
+  border-radius: 8px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.ck-editor-custom-wrapper .ck.ck-editor__top,
+.ck-editor-custom-wrapper .ck.ck-sticky-panel,
+.ck-editor-custom-wrapper .ck.ck-sticky-panel__content {
+  width: 100% !important;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.ck-editor-custom-wrapper .ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content {
+  border: 1px solid #dee4ed;
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  overflow: visible;
+  z-index: 20;
+}
+
+.ck-editor-custom-wrapper .ck.ck-toolbar {
+  width: 100%;
+  max-width: 100%;
+  background: #f8fafc !important;
+  border: 0 !important;
+  overflow: visible;
+}
+
+.ck-editor-custom-wrapper .ck.ck-editor__main>.ck-editor__editable {
+  background-color: #fff !important;
+  border: 1px solid #dee4ed !important;
+  border-radius: 0 0 8px 8px !important;
+  box-shadow: none !important;
+}
+
+.ck-editor-custom-wrapper .ck.ck-editor__main>.ck-editor__editable.ck-focused {
+  border-color: #2577eb !important;
+  box-shadow: 0 0 0 2px rgba(235, 94, 37, 0.12) !important;
+}
+
+.ck-editor__editable_inline h1,
+.ck-content h1 {
+  display: block !important;
+  font-size: 2em !important;
+  font-weight: bold !important;
+  margin-top: 0.67em !important;
+  margin-bottom: 0.67em !important;
+}
+
+.ck-editor__editable_inline h2,
+.ck-content h2 {
+  display: block !important;
+  font-size: 1.5em !important;
+  font-weight: bold !important;
+  margin-top: 0.83em !important;
+  margin-bottom: 0.83em !important;
+}
+
+.ck-editor__editable_inline h3,
+.ck-content h3 {
+  display: block !important;
+  font-size: 1.17em !important;
+  font-weight: bold !important;
+  margin-top: 1em !important;
+  margin-bottom: 1em !important;
+}
+
+.ck-editor__editable_inline ul,
+.ck-content ul {
+  display: block !important;
+  list-style-type: disc !important;
+  padding-left: 40px !important;
+  margin-top: 1em !important;
+  margin-bottom: 1em !important;
+}
+
+.ck-editor__editable_inline ol,
+.ck-content ol {
+  display: block !important;
+  list-style-type: decimal !important;
+  padding-left: 40px !important;
+  margin-top: 1em !important;
+  margin-bottom: 1em !important;
+}
+
+.ck-editor__editable_inline li,
+.ck-content li {
+  display: list-item !important;
+}
+
+.ck-editor__editable_inline strong,
+.ck-editor__editable_inline b,
+.ck-content strong,
+.ck-content b {
+  font-weight: bold !important;
+}
+
+.ck-editor__editable_inline i,
+.ck-editor__editable_inline em,
+.ck-content i,
+.ck-content em {
+  font-style: italic !important;
+}
+
+.ck-editor__editable_inline blockquote,
+.ck-content blockquote {
+  display: block !important;
+  border-left: 5px solid #ccc !important;
+  padding-left: 15px !important;
+  margin: 1em 0 !important;
+  color: #666 !important;
+  font-style: italic !important;
+}
+
+.ck-editor__editable_inline table,
+.ck-content table {
+  display: table !important;
+  border-collapse: collapse !important;
+  width: 100% !important;
+  margin: 1em 0 !important;
+}
+
+.ck-editor__editable_inline table td,
+.ck-editor__editable_inline table th,
+.ck-content table td,
+.ck-content table th {
+  border: 1px solid #ccc !important;
+  padding: 8px !important;
+}
+
+.ck-editor__editable_inline ul.todo-list,
+.ck-content ul.todo-list {
+  list-style-type: none !important;
+  padding-left: 20px !important;
+}
+
+.ck-editor__editable_inline ul.todo-list li,
+.ck-content ul.todo-list li {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+/* Custom list marker style for CKEditor output */
+.ck-content li.ck-list-marker-color::marker,
+.ck-content li.ck-list-marker-color::before {
+  color: var(--ck-content-list-marker-color) !important;
+}
+
+.ck-content li.ck-list-marker-bold::marker,
+.ck-content li.ck-list-marker-bold::before {
+  font-weight: bold !important;
+}
+
+.ck.ck-dropdown__panel .ck-list {
+  max-height: 220px;
+  overflow-y: auto !important;
+}
