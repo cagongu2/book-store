@@ -15,8 +15,22 @@ const userSchema =  new mongoose.Schema({
         type: String,
         enum: ['user', 'admin'],
         required: true
+    },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
+    loginAttempts: {
+        type: Number,
+        default: 0
+    },
+    lockedUntil: {
+        type: Date
+    },
+    lastLoginAt: {
+        type: Date
     }
-})
+}, { timestamps: true });
 
 userSchema.pre('save', async function( next) {
     if(!this.isModified('password')) return next();

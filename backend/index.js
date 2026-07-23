@@ -23,6 +23,10 @@ app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/admin", adminRoutes)
 
+// Swagger setup
+const { swaggerUi, specs } = require('./src/config/swagger');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
 async function main() {
     await mongoose.connect(process.env.DB_URL);
     app.get('/', (req, res) => {
