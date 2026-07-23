@@ -28,7 +28,7 @@ const router =  express.Router();
  *             type: object
  *             required:
  *               - title
- *               - category
+ *               - categories
  *               - coverImage
  *               - oldPrice
  *               - newPrice
@@ -49,8 +49,6 @@ const router =  express.Router();
  *                 type: string
  *               publishedYear:
  *                 type: integer
- *               category:
- *                 type: string
  *               categories:
  *                 type: array
  *                 items:
@@ -162,8 +160,6 @@ router.get("/:id", getBookById);
  *                 type: string
  *               publishedYear:
  *                 type: integer
- *               category:
- *                 type: string
  *               categories:
  *                 type: array
  *                 items:

@@ -14,7 +14,6 @@ class BookMapper {
             pageCount: book.pageCount,
             language: book.language,
             publishedYear: book.publishedYear,
-            category: book.category,
             categories: book.categories,
             coverImage: book.coverImage,
             images: book.images,

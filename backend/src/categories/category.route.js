@@ -1,8 +1,8 @@
 const express = require('express');
-const { createCategory, getCategories, getCategoryById, updateCategory, deleteCategory } = require('./category.controller');
+const { createCategory, getCategories, getCategoryById, updateCategory, deleteCategory, updatePriority } = require('./category.controller');
 const verifyAdminToken = require('../middleware/verifyAdminToken');
 const validateRequest = require('../middleware/validateRequest');
-const { createCategorySchema, updateCategorySchema } = require('../validations/category.validation');
+const { createCategorySchema, updateCategorySchema, getCategoriesSchema, updatePrioritySchema } = require('../validations/category.validation');
 const router = express.Router();
 
 /**
@@ -51,19 +51,97 @@ router.post("/", verifyAdminToken, validateRequest(createCategorySchema), create
  * @swagger
  * /api/v1/categories:
  *   get:
- *     summary: Lấy danh sách danh mục (Trả về dạng cây - Tree)
+ *     summary: Lấy danh sách danh mục
  *     tags: [Categories]
  *     parameters:
  *       - in: query
- *         name: adminView
+ *         name: parentId
+ *         schema:
+ *           type: string
+ *         description: Lọc theo danh mục cha. 'null' để lấy category cấp 1.
+ *       - in: query
+ *         name: level
+ *         schema:
+ *           type: integer
+ *           enum: [1, 2]
+ *         description: Lọc theo cấp (1 hoặc 2).
+ *       - in: query
+ *         name: status
  *         schema:
  *           type: boolean
- *         description: Trả về cả các danh mục bị ẩn (isActive = false). Dành cho Admin.
+ *         description: "true = dang active, false = bi an"
+ *       - in: query
+ *         name: searchText
+ *         schema:
+ *           type: string
+ *         description: "Tim kiem theo name, slug, description"
+ *       - in: query
+ *         name: readyForProduct
+ *         schema:
+ *           type: boolean
+ *         description: "Lọc các danh mục sẵn sàng chứa sản phẩm (không có danh mục con)"
+ *       - in: query
+ *         name: readyForCategory
+ *         schema:
+ *           type: boolean
+ *         description: "Lọc các danh mục sẵn sàng chứa danh mục con (không có sản phẩm)"
+ *       - in: query
+ *         name: isTree
+ *         schema:
+ *           type: boolean
+ *           default: true
+ *         description: "true = cay, false = danh sach phang"
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Số trang.
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *           maximum: 100
+ *         description: Số lượng mỗi trang.
  *     responses:
  *       200:
  *         description: Trả về danh sách danh mục
  */
-router.get("/", getCategories);
+router.get("/", validateRequest(getCategoriesSchema), getCategories);
+
+/**
+ * @swagger
+ * /api/v1/categories/update-priority:
+ *   patch:
+ *     summary: Di chuyển / Cập nhật vị trí priority của một danh mục (tự động dồn thứ tự các danh mục còn lại)
+ *     tags: [Categories]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - categoryId
+ *               - priority
+ *             properties:
+ *               categoryId:
+ *                 type: string
+ *                 description: ID của danh mục cần chuyển
+ *               priority:
+ *                 type: integer
+ *                 description: Vị trí priority mới mong muốn
+ *               parentId:
+ *                 type: string
+ *                 description: ID danh mục cha mới (nếu muốn đổi cha, optional)
+ *     responses:
+ *       200:
+ *         description: Cập nhật vị trí danh mục thành công
+ */
+router.patch("/update-priority", verifyAdminToken, validateRequest(updatePrioritySchema), updatePriority);
 
 /**
  * @swagger

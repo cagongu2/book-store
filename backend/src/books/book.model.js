@@ -13,8 +13,7 @@ const bookSchema = new mongoose.Schema({
     pageCount: { type: Number },
     language: { type: String, default: "vi" },
     publishedYear: { type: Number },
-    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
-    categories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: [] }],
+    categories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
     coverImage: { type: String, required: true },
     images: { type: [String], default: [] },
     oldPrice: { type: Number, required: true },
@@ -32,7 +31,7 @@ const bookSchema = new mongoose.Schema({
 // Indexes
 bookSchema.index({ slug: 1 }, { unique: true });
 bookSchema.index({ sku: 1 }, { unique: true });
-bookSchema.index({ category: 1, status: 1 });
+bookSchema.index({ categories: 1, status: 1 });
 bookSchema.index({ title: "text", author: "text", description: "text" });
 bookSchema.index({ isDeleted: 1, status: 1 });
 

@@ -28,7 +28,31 @@ const updateCategorySchema = z.object({
     })
 });
 
+const getCategoriesSchema = z.object({
+    query: z.object({
+        parentId: z.string().optional(),
+        level: z.coerce.number().int().min(1).max(2).optional(),
+        status: z.enum(['true', 'false']).optional(),
+        searchText: z.string().optional(),
+        readyForProduct: z.enum(['true', 'false']).optional(),
+        readyForCategory: z.enum(['true', 'false']).optional(),
+        isTree: z.enum(['true', 'false']).optional(),
+        page: z.coerce.number().int().min(1).default(1).optional(),
+        limit: z.coerce.number().int().min(1).max(100).default(20).optional(),
+    })
+});
+
+const updatePrioritySchema = z.object({
+    body: z.object({
+        categoryId: z.string({ required_error: "ID danh mục là bắt buộc" }).regex(objectIdRegex, "ID danh mục không hợp lệ"),
+        priority: z.number({ required_error: "Priority là bắt buộc" }).int("Priority phải là số nguyên").min(1, "Priority phải lớn hơn hoặc bằng 1"),
+        parentId: z.string().regex(objectIdRegex, "ID danh mục cha không hợp lệ").nullable().optional()
+    })
+});
+
 module.exports = {
     createCategorySchema,
-    updateCategorySchema
+    updateCategorySchema,
+    getCategoriesSchema,
+    updatePrioritySchema
 };
