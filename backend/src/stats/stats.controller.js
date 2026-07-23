@@ -20,13 +20,13 @@ const getAdminStats = asyncHandler(async (req, res) => {
 
     // 3. Trending books statistics
     const trendingBooksCount = await Book.aggregate([
-        { $match: { trending: true } },
+        { $match: { trending: true, isDeleted: false } },
         { $count: "trendingBooksCount" }
     ]);
     const trendingBooks = trendingBooksCount.length > 0 ? trendingBooksCount[0].trendingBooksCount : 0;
 
     // 4. Total number of books
-    const totalBooks = await Book.countDocuments();
+    const totalBooks = await Book.countDocuments({ isDeleted: false });
 
     // 5. Monthly sales
     const monthlySales = await Order.aggregate([

@@ -31,8 +31,8 @@ const getBooks = async (page = 1, limit = 10) => {
     const skip = (page - 1) * limit;
 
     const [books, total] = await Promise.all([
-        Book.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
-        Book.countDocuments()
+        Book.find({ isDeleted: false }).sort({ createdAt: -1 }).skip(skip).limit(limit),
+        Book.countDocuments({ isDeleted: false })
     ]);
 
     return {
@@ -47,7 +47,7 @@ const getBooks = async (page = 1, limit = 10) => {
 };
 
 const getBookById = async (id) => {
-    const book = await Book.findById(id);
+    const book = await Book.findOne({ _id: id, isDeleted: false });
     if (!book) {
         throw ApiError.notFound("Không tìm thấy sách");
     }
@@ -59,9 +59,12 @@ const updateBook = async (id, updateData) => {
         await validateCategoryNoChildren(updateData.categories);
     }
 
-    const oldBook = await Book.findById(id).lean();
+    const oldBook = await Book.findOne({ _id: id, isDeleted: false }).lean();
+    if (!oldBook) {
+        throw ApiError.notFound("Không tìm thấy sách để cập nhật");
+    }
 
-    const updatedBook = await Book.findByIdAndUpdate(id, updateData, { new: true });
+    const updatedBook = await Book.findOneAndUpdate({ _id: id, isDeleted: false }, updateData, { new: true });
     if (!updatedBook) {
         throw ApiError.notFound("Không tìm thấy sách để cập nhật");
     }
@@ -76,12 +79,17 @@ const updateBook = async (id, updateData) => {
 };
 
 const deleteBook = async (id) => {
-    const deletedBook = await Book.findByIdAndDelete(id);
-    if (!deletedBook) {
+    const book = await Book.findOne({ _id: id, isDeleted: false });
+    if (!book) {
         throw ApiError.notFound("Không tìm thấy sách để xóa");
     }
-    await recountBookCategories(deletedBook);
-    return deletedBook;
+
+    book.isDeleted = true;
+    book.deletedAt = new Date();
+    await book.save();
+
+    await recountBookCategories(book);
+    return book;
 };
 
 module.exports = {
