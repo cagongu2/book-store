@@ -1,34 +1,32 @@
-const Book = require("./book.model");
 const ApiResponse = require("../core/ApiResponse");
-const ApiError = require("../core/ApiError");
 const asyncHandler = require("../core/asyncHandler");
 const BookMapper = require("./book.mapper");
+const bookService = require("./book.service");
 
-const postABook = asyncHandler(async (req, res) => {
-    const newBook = new Book({ ...req.body });
-    await newBook.save();
+const createBook = asyncHandler(async (req, res) => {
+    const newBook = await bookService.createBook(req.body);
     
     res.status(201).json(
         ApiResponse.success(BookMapper.toResponse(newBook), "Tạo sách thành công")
     );
 });
 
-// get all books
-const getAllBooks = asyncHandler(async (req, res) => {
-    const books = await Book.find().sort({ createdAt: -1 });
+// get all books with pagination
+const getBooks = asyncHandler(async (req, res) => {
+    // page và limit đã được validate bởi validateRequest (zod)
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+
+    const { books, meta } = await bookService.getBooks(page, limit);
     
     res.status(200).json(
-        ApiResponse.success(BookMapper.toResponseList(books))
+        ApiResponse.success(BookMapper.toResponseList(books), "Lấy danh sách thành công", meta)
     );
 });
 
-const getSingleBook = asyncHandler(async (req, res) => {
+const getBookById = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const book = await Book.findById(id);
-    
-    if (!book) {
-        throw ApiError.notFound("Không tìm thấy sách");
-    }
+    const book = await bookService.getBookById(id);
     
     res.status(200).json(
         ApiResponse.success(BookMapper.toResponse(book))
@@ -36,26 +34,18 @@ const getSingleBook = asyncHandler(async (req, res) => {
 });
 
 // update book data
-const UpdateBook = asyncHandler(async (req, res) => {
+const updateBook = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const updatedBook = await Book.findByIdAndUpdate(id, req.body, { new: true });
-    
-    if (!updatedBook) {
-        throw ApiError.notFound("Không tìm thấy sách để cập nhật");
-    }
+    const updatedBook = await bookService.updateBook(id, req.body);
     
     res.status(200).json(
         ApiResponse.success(BookMapper.toResponse(updatedBook), "Cập nhật sách thành công")
     );
 });
 
-const deleteABook = asyncHandler(async (req, res) => {
+const deleteBook = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const deletedBook = await Book.findByIdAndDelete(id);
-    
-    if (!deletedBook) {
-        throw ApiError.notFound("Không tìm thấy sách để xóa");
-    }
+    const deletedBook = await bookService.deleteBook(id);
     
     res.status(200).json(
         ApiResponse.success(BookMapper.toResponse(deletedBook), "Xóa sách thành công")
@@ -63,9 +53,9 @@ const deleteABook = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-    postABook,
-    getAllBooks,
-    getSingleBook,
-    UpdateBook,
-    deleteABook
+    createBook,
+    getBooks,
+    getBookById,
+    updateBook,
+    deleteBook
 };

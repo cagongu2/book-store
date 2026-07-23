@@ -27,7 +27,15 @@ const updateBookSchema = z.object({
     })
 });
 
+const getBooksSchema = z.object({
+    query: z.object({
+        page: z.string().regex(/^\d+$/, "Page phải là số nguyên dương").optional(),
+        limit: z.string().regex(/^\d+$/, "Limit phải là số nguyên dương").optional()
+    }).optional()
+});
+
 module.exports = {
     createBookSchema,
-    updateBookSchema
+    updateBookSchema,
+    getBooksSchema
 };
