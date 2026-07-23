@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Table, Button, Space, Popconfirm, Typography } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { useGetBooks } from '../../hooks/useGetBooks';
-import { useBooksMutation } from '../../hooks/useBooksMutation';
+import { useGetBooks, useBooksMutation } from '../../hooks/useBook';
 import { Book } from '../../types/book.types';
 
 const { Title } = Typography;

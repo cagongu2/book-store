@@ -1,21 +1,21 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import Home from "../pages/home/Home";
-import Login from "../components/Login";
-import Register from "../components/Register";
-import CartPage from "../pages/books/CartPage";
-import CheckoutPage from "../pages/books/CheckoutPage";
-import SingleBook from "../pages/books/SingleBook";
+import Home from "../features/home/pages/Home";
+import Login from "../features/auth/pages/Login";
+import Register from "../features/auth/pages/Register";
+import CartPage from "../features/orders/pages/CartPage";
+import CheckoutPage from "../features/orders/pages/CheckoutPage";
+import SingleBook from "../features/books/pages/SingleBook";
 import PrivateRoute from "../routers/PrivateRoute";
-import OrderPage from "../pages/books/OrderPage";
+import OrderPage from "../features/orders/pages/OrderPage";
 import AdminRoute from "./AdminRoute";
-import AdminLogin from "../components/AdminLogin";
-import DashboardLayout from "../pages/dashboard/DashboardLayout";
-import Dashboard from "../pages/dashboard/Dashboard";
+import AdminLogin from "../features/auth/pages/AdminLogin";
+import DashboardLayout from "../features/dashboard/pages/DashboardLayout";
+import Dashboard from "../features/dashboard/pages/Dashboard";
 import ManageBooks from "../features/books/pages/ManageBooks";
-import UpdateBook from "../pages/dashboard/EditBook/UpdateBook";
-import AddBook from "../pages/dashboard/addBook/Addbook";
-import UserDashboard from "../pages/dashboard/users/UserDashboard";
+import UpdateBook from "../features/books/pages/UpdateBook";
+import AddBook from "../features/books/pages/AddBook";
+import UserDashboard from "../features/auth/pages/UserDashboard";
 
 const router = createBrowserRouter([
   {
