@@ -75,7 +75,7 @@ router.post('/login', validateRequest(loginCustomerSchema), loginCustomer);
  *     summary: Lấy thông tin profile khách hàng
  *     tags: [Customers]
  *     security:
- *       - firebaseAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Thông tin khách hàng

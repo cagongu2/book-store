@@ -8,6 +8,21 @@ class BookMapper {
         const discountPercent = isDiscounted
             ? Math.round(((oldPrice - newPrice) / oldPrice) * 100)
             : 0;
+
+        const formatCategories = (categories) => {
+            if (!Array.isArray(categories)) return [];
+            return categories.filter(Boolean).map(cat => {
+                if (typeof cat === 'object' && cat._id) {
+                    return {
+                        id: cat._id,
+                        name: cat.name,
+                        parentId: cat.parentId || null,
+                        slug: cat.slug
+                    };
+                }
+                return { id: cat };
+            });
+        };
         
         return {
             id: book._id,
@@ -21,7 +36,7 @@ class BookMapper {
             pageCount: book.pageCount,
             language: book.language,
             publishedYear: book.publishedYear,
-            categories: book.categories,
+            categories: formatCategories(book.categories),
             coverImage: book.coverImage,
             images: book.images,
             oldPrice: oldPrice,

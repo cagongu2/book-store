@@ -228,7 +228,7 @@ const getCategoryById = async (id) => {
 };
 
 const updateCategory = async (id, updateData) => {
-    const category = await Category.findOne({ _id: id, isDeleted: false });
+    let category = await Category.findOne({ _id: id, isDeleted: false });
     if (!category) {
         throw ApiError.notFound("Không tìm thấy danh mục để cập nhật");
     }

@@ -4,6 +4,12 @@ const { recountProductCount } = require("../categories/category.service");
 const ApiError = require("../core/ApiError");
 const { escapeRegex } = require("../utils/stringUtils");
 
+const categoryPopulateOption = {
+    path: 'categories',
+    select: 'name parentId slug',
+    match: { isDeleted: false }
+};
+
 const validateCategoryNoChildren = async (categoryIds) => {
     const ids = Array.isArray(categoryIds) ? categoryIds : [categoryIds];
     for (const id of ids) {
@@ -21,7 +27,7 @@ const validateCategoryNoChildren = async (categoryIds) => {
 
 const recountBookCategories = async (book) => {
     const catIds = (book.categories || []).filter(Boolean);
-    const uniqueIds = [...new Set(catIds.map(id => id.toString()))];
+    const uniqueIds = [...new Set(catIds.map(id => (id._id || id).toString()))];
     await Promise.all(uniqueIds.map(id => recountProductCount(id)));
 };
 
@@ -36,6 +42,7 @@ const createBook = async (bookData) => {
         const newBook = new Book({ ...bookData });
         await newBook.save();
         await recountBookCategories(newBook);
+        await newBook.populate(categoryPopulateOption);
         return newBook;
     } catch (error) {
         if (error.code === 11000) {
@@ -104,7 +111,11 @@ const getBooks = async ({ page = 1, limit = 10, category, search, status, trendi
     }
 
     const [books, total] = await Promise.all([
-        Book.find(query).sort(sortOptions).skip(skip).limit(numericLimit),
+        Book.find(query)
+            .populate(categoryPopulateOption)
+            .sort(sortOptions)
+            .skip(skip)
+            .limit(numericLimit),
         Book.countDocuments(query)
     ]);
 
@@ -120,7 +131,8 @@ const getBooks = async ({ page = 1, limit = 10, category, search, status, trendi
 };
 
 const getBookById = async (id) => {
-    const book = await Book.findOne({ _id: id, isDeleted: false });
+    const book = await Book.findOne({ _id: id, isDeleted: false })
+        .populate(categoryPopulateOption);
     if (!book) {
         throw ApiError.notFound("Không tìm thấy sách");
     }
@@ -138,7 +150,8 @@ const updateBook = async (id, updateData) => {
     }
 
     try {
-        const updatedBook = await Book.findOneAndUpdate({ _id: id, isDeleted: false }, updateData, { new: true });
+        const updatedBook = await Book.findOneAndUpdate({ _id: id, isDeleted: false }, updateData, { new: true })
+            .populate(categoryPopulateOption);
         if (!updatedBook) {
             throw ApiError.notFound("Không tìm thấy sách để cập nhật");
         }
@@ -146,7 +159,7 @@ const updateBook = async (id, updateData) => {
         // Recount tất cả category bị ảnh hưởng (cũ + mới)
         const oldCatIds = (oldBook?.categories || []).filter(Boolean);
         const newCatIds = (updatedBook.categories || []).filter(Boolean);
-        const allAffected = [...new Set([...oldCatIds, ...newCatIds].map(catId => catId.toString()))];
+        const allAffected = [...new Set([...oldCatIds, ...newCatIds].map(catId => (catId._id || catId).toString()))];
         await Promise.all(allAffected.map(catId => recountProductCount(catId)));
 
         return updatedBook;
