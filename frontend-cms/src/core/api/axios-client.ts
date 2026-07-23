@@ -1,4 +1,5 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios from 'axios';
+import type { AxiosError, AxiosResponse } from 'axios';
 
 // Get base URL from env or use default for development
 const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
