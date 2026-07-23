@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const { generateSlug } = require('../core/stringUtils');
+const { generateSlug } = require('../utils/stringUtils');
 
 const bookSchema = new mongoose.Schema({
     title: { type: String, required: true, maxlength: 200 },
@@ -32,7 +32,7 @@ const bookSchema = new mongoose.Schema({
 bookSchema.index({ slug: 1 }, { unique: true });
 bookSchema.index({ sku: 1 }, { unique: true });
 bookSchema.index({ categories: 1, status: 1 });
-bookSchema.index({ title: "text", author: "text", description: "text" });
+bookSchema.index({ title: "text", author: "text", description: "text" }, { default_language: "none" });
 bookSchema.index({ isDeleted: 1, status: 1 });
 
 // Pre-save / Pre-validate hooks để tự sinh slug và sku

@@ -1,6 +1,5 @@
 /**
- * Hàm hỗ trợ tạo slug đơn giản không dùng thư viện ngoài
- * Chuyển đổi chuỗi có dấu tiếng Việt thành chuỗi không dấu, chữ thường, phân cách bởi dấu gạch ngang
+ * Hàm hỗ trợ tạo slug đơn giản từ chuỗi đầu vào
  * @param {string} text - Chuỗi đầu vào
  * @returns {string} - Slug URL-friendly
  */
@@ -15,6 +14,18 @@ const generateSlug = (text) => {
         .replace(/--+/g, '-');         // Gộp nhiều dấu gạch ngang liên tiếp
 };
 
+/**
+ * Escape các ký tự đặc biệt trong chuỗi để sử dụng an toàn với Regular Expression.
+ * Giúp chống lỗi SyntaxError (Crash 500) và Regex Injection khi người dùng tìm kiếm.
+ * @param {string} text - Chuỗi tìm kiếm từ người dùng
+ * @returns {string} - Chuỗi đã được escape ký tự đặc biệt
+ */
+const escapeRegex = (text) => {
+    if (typeof text !== 'string') return '';
+    return text.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
+
 module.exports = {
-    generateSlug
+    generateSlug,
+    escapeRegex
 };

@@ -1,6 +1,7 @@
 const Category = require("./category.model");
 const Book = require("../books/book.model");
 const ApiError = require("../core/ApiError");
+const { escapeRegex } = require("../utils/stringUtils");
 
 const validateBusinessRules = async (data, categoryId = null) => {
     if (data.parentId) {
@@ -22,8 +23,6 @@ const validateBusinessRules = async (data, categoryId = null) => {
             throw ApiError.badRequest("Số lượng danh mục nổi bật đã đạt tối đa (5). Vui lòng gỡ nổi bật danh mục khác trước.");
         }
     }
-
-
 };
 
 const recountProductCount = async (categoryId) => {
@@ -122,8 +121,9 @@ const getCategories = async ({ parentId, level, isActive, searchText, readyForPr
             rootQuery.parentId = null;
         }
 
-        if (searchText) {
-            const searchRegex = { $regex: searchText, $options: "i" };
+        if (searchText && searchText.trim()) {
+            const escapedText = escapeRegex(searchText);
+            const searchRegex = { $regex: escapedText, $options: "i" };
             const matched = await Category.find({
                 ...query,
                 $or: [
@@ -181,8 +181,9 @@ const getCategories = async ({ parentId, level, isActive, searchText, readyForPr
         return { items: tree, total, page, limit };
 
     } else {
-        if (searchText) {
-            const searchRegex = { $regex: searchText, $options: "i" };
+        if (searchText && searchText.trim()) {
+            const escapedText = escapeRegex(searchText);
+            const searchRegex = { $regex: escapedText, $options: "i" };
             const matched = await Category.find({
                 ...query,
                 $or: [

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { generateSlug } = require('../core/stringUtils');
+const { generateSlug } = require('../utils/stringUtils');
 
 const categorySchema = new mongoose.Schema({
     name: { type: String, required: true, maxlength: 50, trim: true },
