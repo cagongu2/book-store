@@ -6,9 +6,10 @@ const ApiError = require("../core/ApiError");
 const asyncHandler = require("../core/asyncHandler");
 const UserMapper = require("./user.mapper");
 const { ErrorCodes } = require('../constants/enums');
+const env = require('../config/env');
 
-const JWT_SECRET = process.env.JWT_SECRET_KEY || 'default_jwt_secret';
-const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET || process.env.JWT_SECRET_KEY || 'default_refresh_secret';
+const JWT_SECRET = env.JWT_SECRET_KEY;
+const REFRESH_SECRET = env.REFRESH_TOKEN_SECRET;
 
 const buildAdminProfile = (admin) => {
     const userObj = UserMapper.toResponse(admin);

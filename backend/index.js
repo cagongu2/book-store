@@ -4,14 +4,13 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const errorHandler = require('./src/middleware/errorHandler');
 
-const mongoose = require("mongoose");
-require('dotenv').config();
-const port = process.env.PORT || 5000;
+const env = require('./src/config/env');
+const port = env.PORT;
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: [process.env.CLIENT_URL],
+    origin: [env.CLIENT_URL],
     credentials: true
 }))
  
@@ -41,7 +40,7 @@ app.use(errorHandler);
 const seedDefaultAdmin = require('./src/utils/seedAdmin');
 
 async function main() {
-    await mongoose.connect(process.env.DB_URL);
+    await mongoose.connect(env.DB_URL);
     await seedDefaultAdmin();
     app.get('/', (req, res) => {
         res.send('Hello World!');

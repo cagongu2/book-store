@@ -2,7 +2,9 @@ const jwt = require('jsonwebtoken');
 const ApiError = require('../core/ApiError');
 const User = require('../users/user.model');
 
-const JWT_SECRET = process.env.JWT_SECRET_KEY;
+const env = require('../config/env');
+
+const JWT_SECRET = env.JWT_SECRET_KEY;
 
 const verifyAdminToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
