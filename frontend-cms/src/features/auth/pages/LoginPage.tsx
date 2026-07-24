@@ -4,6 +4,7 @@ import { UserOutlined, LockOutlined, BookOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { loginUser } from '../../../store/slices/auth.action';
+import { ApiError } from '../../../core/api/api-error';
 import type { LoginPayload } from '../types/login.type';
 
 const { Title, Text } = Typography;
@@ -20,10 +21,8 @@ const LoginPage: React.FC = () => {
       message.success('Đăng nhập hệ thống thành công!');
       navigate('/', { replace: true });
     } catch (error: unknown) {
-      const err = error as { response?: { data?: { message?: string } }; message?: string };
-      const errorMessage =
-        err.response?.data?.message || err.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!';
-      message.error(errorMessage);
+      const apiError = ApiError.from(error);
+      message.error(apiError.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!');
     }
   };
 

@@ -5,6 +5,10 @@ import queryString from "query-string";
 import { message } from "antd";
 import { ApiError } from "./api-error";
 import { ENV } from "../../constants/env";
+import { getAccessToken } from "../../utils/auth-token";
+import { store } from "../../store/store";
+import { logOut } from "../../store/slices/auth-slice";
+import { ROUTES } from "../../constants/routes";
 
 
 export const axiosClient = axios.create({
@@ -18,10 +22,10 @@ axiosClient.interceptors.request.use(
     if (!(config.data instanceof FormData) && !config.headers.has("Content-Type")) {
       config.headers.set("Content-Type", "application/json");
     }
-    // const token = getAccessToken();
-    // if (token) {
-    //   config.headers.set("Authorization", `Bearer ${token}`);
-    // }
+    const token = getAccessToken();
+    if (token) {
+      config.headers.set("Authorization", `Bearer ${token}`);
+    }
     return config;
   },
 );
@@ -36,12 +40,12 @@ axiosClient.interceptors.response.use(
 
       switch (status) {
         case 401:
-          // store.dispatch(logOut());
+          store.dispatch(logOut());
           message.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.");
 
-          // if (window.location.pathname !== ROUTES.AUTH.LOGIN) {
-          //   window.location.href = ROUTES.AUTH.LOGIN;
-          // }
+          if (window.location.pathname !== ROUTES.AUTH.LOGIN) {
+            window.location.href = ROUTES.AUTH.LOGIN;
+          }
           break;
         case 403:
           message.error("Bạn không có quyền thực hiện thao tác này.");
