@@ -1,13 +1,12 @@
-import { ENV } from "./env"
+import { ENV } from "./env";
 
-const ENDPOINT_URL = ENV.END_POINT
-const API = '/api'
-const VERSION = '/v1'
-const SITE = '/cms'
-const BASE_URL = `${ENDPOINT_URL + API + VERSION + SITE}`
+const BASE_URL = `${ENV.END_POINT}/api/v1`;
 
 export const ApiRouters = {
-  AUTH: BASE_URL + "/auth",
-  PROFILE: BASE_URL + "/profile",
-  FILES: BASE_URL + "/files",
+  AUTH: `${BASE_URL}/auth`,
+  PROFILE: `${BASE_URL}/auth`,
+  FILES: `${BASE_URL}/files`,
+  BOOKS: `${BASE_URL}/books`,
+  CATEGORIES: `${BASE_URL}/categories`,
+  ORDERS: `${BASE_URL}/orders`,
 };

@@ -9,7 +9,7 @@ import { getAccessToken } from "../../utils/auth-token";
 import { store } from "../../store/store";
 import { logOut, setAuth } from "../../store/slices/auth-slice";
 import { ROUTES } from "../../constants/routes";
-
+import { ApiRouters } from "../../constants/api-routes";
 
 export const axiosClient = axios.create({
   baseURL: ENV.END_POINT,
@@ -83,7 +83,7 @@ axiosClient.interceptors.response.use(
 
         try {
           const refreshResponse = await axios.post(
-            `${ENV.END_POINT}/auth/refresh`,
+            `${ApiRouters.AUTH}/refresh`,
             {},
             { withCredentials: true }
           );
