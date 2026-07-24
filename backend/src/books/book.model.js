@@ -29,8 +29,6 @@ const bookSchema = new mongoose.Schema({
 });
 
 // Indexes
-bookSchema.index({ slug: 1 }, { unique: true });
-bookSchema.index({ sku: 1 }, { unique: true });
 bookSchema.index({ categories: 1, status: 1 });
 bookSchema.index({ title: "text", author: "text", description: "text" }, { default_language: "none" });
 bookSchema.index({ isDeleted: 1, status: 1 });

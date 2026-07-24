@@ -4,6 +4,9 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const errorHandler = require('./src/middleware/errorHandler');
 
+const mongoose = require("mongoose");
+require('dotenv').config();
+
 const env = require('./src/config/env');
 const port = env.PORT;
 
@@ -13,7 +16,7 @@ app.use(cors({
     origin: [env.CLIENT_URL],
     credentials: true
 }))
- 
+
 const bookRoutes = require('./src/books/book.route');
 const orderRoutes = require('./src/orders/order.route');
 const userRoutes = require('./src/users/user.router');
