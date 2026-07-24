@@ -1,6 +1,8 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { lazy } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
-import PlaceholderPage from '../components/pages/PlaceholderPage';
+
+const PlaceholderPage = lazy(() => import('../components/pages/PlaceholderPage'));
 
 const router = createBrowserRouter([
     {
@@ -9,10 +11,15 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <PlaceholderPage title='Dashboard' />,
+                element: (
+                    <PlaceholderPage title="Dashboard" />
+                ),
             },
         ],
     },
 ]);
 
-export default router;
+export default function AppRouter() {
+    return <RouterProvider router={router} />;
+}
+
