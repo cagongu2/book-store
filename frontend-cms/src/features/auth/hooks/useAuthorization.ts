@@ -13,7 +13,7 @@ export function useAuthorization() {
         permissions,
         hasRole: (allowedRoles: readonly AppRole[]) => hasAllowedRoles(roles, allowedRoles),
         hasPermission: (requiredPermissions: readonly AppPermission[]) => hasRequiredPermissions(permissions, requiredPermissions),
-        canAccess: (allowRoles: readonly AppRole[], requiredPermissions: readonly AppPermission[]) =>
-            hasAllowedRoles(roles, allowRoles) && hasRequiredPermissions(permissions, requiredPermissions),
+        canAccess: (allowRoles?: readonly AppRole[], requiredPermissions?: readonly AppPermission[]) =>
+            hasAllowedRoles(roles, allowRoles ?? []) && hasRequiredPermissions(permissions, requiredPermissions ?? []),
     };
 }
