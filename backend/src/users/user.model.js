@@ -13,9 +13,17 @@ const userSchema =  new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['user', 'admin'],
+        enum: ['ADMINISTRATORS', 'STORE_MANAGER', 'CONTENT_EDITOR', 'admin', 'user'],
+        default: 'ADMINISTRATORS',
         required: true
     },
+    refreshTokens: [
+        {
+            token: { type: String, required: true },
+            createdAt: { type: Date, default: Date.now },
+            expiresAt: { type: Date, required: true }
+        }
+    ],
     isActive: {
         type: Boolean,
         default: true

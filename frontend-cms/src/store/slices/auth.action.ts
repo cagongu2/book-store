@@ -1,7 +1,7 @@
 import type { LoginPayload } from "../../features/auth/types/login.type";
 import type { AppDispatch } from "../store";
-import { setAuth, setLoading } from "./auth-slice";
-import { login, profile } from "../../features/auth/services/auth.service";
+import { logOut, setAuth, setLoading } from "./auth-slice";
+import { login, logoutApi, profile } from "../../features/auth/services/auth.service";
 import { mapAdminProfileToAuthUser, mapToAdminProfile } from "../../features/auth/utils/auth.mapper";
 
 export const loginUser = (data: LoginPayload) => {
@@ -34,7 +34,7 @@ export const loginUser = (data: LoginPayload) => {
             throw error;
         }
     };
-}
+};
 
 export const getProfile = () => {
     return async (dispatch: AppDispatch) => {
@@ -66,4 +66,16 @@ export const getProfile = () => {
             throw error;
         }
     };
-}
+};
+
+export const logoutUser = () => {
+    return async (dispatch: AppDispatch) => {
+        try {
+            await logoutApi();
+        } catch {
+            // Ignore API logout error
+        } finally {
+            dispatch(logOut());
+        }
+    };
+};

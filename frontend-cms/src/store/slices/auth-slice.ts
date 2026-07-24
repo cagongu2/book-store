@@ -14,7 +14,7 @@ export interface AuthTokenPayload {
 }
 
 export interface SetAuthPayload {
-    user: AuthUser,
+    user?: AuthUser,
     token: AuthTokenPayload,
     profile?: AdminProfileData,
     syncToken?: boolean
@@ -52,17 +52,16 @@ const authSlice = createSlice({
         },
         setAuth: (state, action: PayloadAction<SetAuthPayload>) => {
             state.accessToken = action.payload.token.access;
-            state.user = action.payload.user;
+            if (action.payload.user) state.user = action.payload.user;
             state.loading = false;
-            if (action.payload.profile) state.profile = action.payload.profile
+            if (action.payload.profile) state.profile = action.payload.profile;
             if (action.payload.syncToken !== false) {
                 setTokenAuth({
                     access: action.payload.token.access,
                     refresh: action.payload.token.refresh,
                     accessExpiresIn: action.payload.token.accessExpiresIn
-                })
+                });
             }
-
         },
         logOut: (state) => {
             state.accessToken = null;

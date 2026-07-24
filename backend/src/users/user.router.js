@@ -1,5 +1,5 @@
 const express = require('express');
-const { loginAdmin, getMe } = require('./user.controller');
+const { loginAdmin, refreshTokenAdmin, logoutAdmin, getMe } = require('./user.controller');
 const validateRequest = require('../middleware/validateRequest');
 const verifyAdminToken = require('../middleware/verifyAdminToken');
 const { loginAdminSchema } = require('../validations/auth.validation');
@@ -41,7 +41,10 @@ const router = express.Router();
  *       500:
  *         description: Server error
  */
+router.post("/login", validateRequest(loginAdminSchema), loginAdmin);
 router.post("/admin", validateRequest(loginAdminSchema), loginAdmin);
+router.post("/refresh", refreshTokenAdmin);
+router.post("/logout", logoutAdmin);
 
 /**
  * @swagger
